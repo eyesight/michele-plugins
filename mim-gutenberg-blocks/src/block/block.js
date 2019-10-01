@@ -35,7 +35,7 @@ const allCategories = wp.apiFetch({path: "/wp/v2/categories"}).then(categories =
 registerBlockType( 'cgb/block-mim-title-lead', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'mim-title-lead - CGB Block' ), // Block title.
+	title: __( 'mim-title-lead - CGB Block' ), // Block title. 
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
@@ -43,7 +43,7 @@ registerBlockType( 'cgb/block-mim-title-lead', {
 		__( 'title' ),
 		__( 'lead' )
 	],
-	attributes: {
+	attributes: { 
 		title: {
 			type: 'string'
 		},
@@ -146,12 +146,12 @@ registerBlockType( 'cgb/block-mim-title-lead', {
 						}) : null}
 						<RichText.Content className="title-lead__copyright" tagName='p' placeholder={__('copyright')} value={copyright} />
 					</div>
-					<div class="title-lead__wrapper">
+					<div class="title-lead__wrapper"> 
 						<RichText.Content className="title-lead__title" tagName='h1' placeholder={__('Title')} value={title} />
 						<RichText.Content className="title-lead__lead" tagName='p' placeholder={__( 'LeadText' )} value={txt} />
 					</div>
 				</div>
-			</div>
+			</div> 
 		);
 	 },
 } );

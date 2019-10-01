@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: mim-title-lead — CGB Gutenberg Block Plugin
+ * Plugin Name: mim-gutenberg-blocks — CGB Gutenberg Block Plugin
  * Plugin URI: https://github.com/ahmadawais/create-guten-block/
- * Description: mim-title-lead — is a Gutenberg plugin created via create-guten-block.
+ * Description: mim-gutenberg-blocks — is a Gutenberg plugin created via create-guten-block.
  * Author: mrahmadawais, maedahbatool
  * Author URI: https://AhmadAwais.com/
  * Version: 1.0.0
