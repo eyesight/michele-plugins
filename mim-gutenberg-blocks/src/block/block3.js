@@ -23,23 +23,28 @@ const { PanelBody, PanelRow, FormToggle } = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-img', {  
+registerBlockType( 'cgb/block-mim-img-txt', { 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'mim-img - CGB Block' ), // Block title.
+	title: __( 'mim-img-txt - CGB Block' ), // Block title.
 	icon: 'align-left', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-img — CGB Block' ),
-		__( 'CGB Example' ), 
+		__( 'mim-img-txt — CGB Block' ),
+		__( 'CGB Example' ),
 		__( 'create-guten-block' ),
-	], 
+	],
 	attributes: {
 		imgUrl: {
 			type: 'string',
 			default: 'http://placehold.it/300x200'
 		},
-		isFullWidth: {
-			type: 'boolean'
+		
+		bodyContent: {
+			type: 'string' 
+		},
+		
+		heading: { 
+			type: 'string'
 		}
 	},
 
@@ -55,45 +60,60 @@ registerBlockType( 'cgb/block-mim-img', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { isFullWidth, imgUrl }, setAttributes } = props;
+		const { attributes: { imgUrl, bodyContent, heading }, setAttributes } = props;
 
 
 		function selectImage(value) {
+			console.log(value);
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
 		}
 	
+		// we create a function that will take the changes from RichText
+		// and update the attributes
+		function changeBodyContent(changes) {
+			setAttributes({
+				bodyContent: changes
+			})
+		}
+	
+		function changeHeading(heading) {
+			// using some nice js features instead of typing
+			setAttributes({ heading: heading });
+		}
+	
 		return [
-			<InspectorControls>
-				<PanelBody
-					title={ __( 'Full width', 'jsforwpblocks' ) }
-				>
-					<PanelRow>
-						<label
-							htmlFor="high-contrast-form-toggle"
-						>
-							{ __( 'Full width', 'jsforwpblocks' ) }
-						</label>
-						<FormToggle
-							id="high-contrast-form-toggle"
-							label={ __( 'image is full width', 'jsforwpblocks' ) }
-							checked={ isFullWidth }
-							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
-						/>
-					</PanelRow>
-				</PanelBody>
-			</InspectorControls>, 
-			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
-				<MediaUpload 
-					onSelect={selectImage}
-					render={ ({open}) => {
-						return <img 
-							src={imgUrl}
-							onClick={open}
-							/>;
-					}}
-					/>
+			<div class="content image-with-text">
+				<div class="grid-container image-with-text__container">
+					<div class="image-with-text__img">
+						<MediaUpload 
+							onSelect={selectImage}
+							render={ ({open}) => {
+								return <img 
+									src={imgUrl}
+									onClick={open}
+									/>;
+							}}		
+						/>			
+					</div>
+						<div class="image-with-text__text">
+							<RichText 
+								className="image-with-text__cat"
+								tagName="p"
+								placeholder="title"
+								value={heading}
+								onChange={changeHeading}
+							/>
+							<RichText 
+								className="image-with-text__txt"
+								tagName="p"
+								placeholder="Enter your text here"
+								value={bodyContent}
+								onChange={changeBodyContent}
+							/>
+					</div>
+				</div>
 			</div>,
 		];
 	},
@@ -112,14 +132,34 @@ registerBlockType( 'cgb/block-mim-img', {
 	save: ( props ) => {
 		const {
 			attributes: {
-				isFullWidth,
-				imgUrl
+				bodyContent,
+				heading,
+				imgUrl 
 			}
 		 } = props;
 	
 		return (
-			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
-				<img src={imgUrl} />
+			<div class="content image-with-text">
+				<div class="grid-container image-with-text__container">
+					<div class="image-with-text__img">
+						<img src={imgUrl} /> 		
+					</div>
+					<div class="image-with-text__text">
+						<RichText.Content
+							className="image-with-text__cat"
+							tagName="p"
+							placeholder={__('Title')}
+							value={heading}
+						/>
+
+						<RichText.Content 
+							className="image-with-text__txt"
+							tagName="p"
+							placeholder={__('Text')}
+							value={bodyContent}
+						/>
+					</div>
+				</div>
 			</div>
 		);}
 } );
