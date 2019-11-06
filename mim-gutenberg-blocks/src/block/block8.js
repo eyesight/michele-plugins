@@ -6,14 +6,14 @@ const ALLOWED_BLOCKS = [ 'core/image', 'core/paragraph' ];
     allowedBlocks={ ALLOWED_BLOCKS }
 />
 registerBlockType( 'cgb/block-mim-list-outer-container', {
-    title: __( 'mim-list-outer-container - CGB Block' ),
+    title: __( 'list-container outer' ), 
     icon: 'universal-access-alt',
 	category: 'common',
-	keywords: [
-		__( 'mim-list-outer-container — CGB Block' ),
+	keywords: [ 
+		__( 'list-container outer' ), 
 		__( 'CGB Example' ),
 		__( 'create-guten-block' ), 
-	],
+	], 
     getEditWrapperProps: function () {
         return {
             "data-align": "full"

@@ -6,7 +6,7 @@ const ALLOWED_BLOCKS = [ 'core/image', 'core/paragraph' ];
     allowedBlocks={ ALLOWED_BLOCKS }
 />
 registerBlockType( 'cgb/block-mim-list-container', {
-    title: __( 'mim-list-container - CGB Block' ),
+    title: __( 'list-container inner' ),
     icon: 'universal-access-alt',
 	category: 'common',
 	keywords: [

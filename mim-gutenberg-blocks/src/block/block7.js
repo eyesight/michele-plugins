@@ -25,7 +25,7 @@ const { RichText, getAutosave } = wp.editor;
 registerBlockType( 'cgb/block-mim-list-item-title', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'mim-list-item-title - CGB Block' ), // Block title. 
+	title: __( 'list-item title' ), // Block title. 
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [

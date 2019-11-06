@@ -25,11 +25,11 @@ const { PanelBody, PanelRow, FormToggle } = wp.components;
  */
 registerBlockType( 'cgb/block-mim-img-title', { 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'mim-img-title - CGB Block' ), // Block title.
+	title: __( 'title with image' ), // Block title.
 	icon: 'align-left', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-img-title — CGB Block' ),
+		__( 'title with image' ),
 		__( 'CGB Example' ),
 		__( 'create-guten-block' ), 
 	],

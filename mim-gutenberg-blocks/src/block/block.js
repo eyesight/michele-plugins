@@ -35,12 +35,12 @@ const allCategories = wp.apiFetch({path: "/wp/v2/categories"}).then(categories =
 registerBlockType( 'cgb/block-mim-title-lead', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'mim-title-lead - CGB Block' ), // Block title. 
+	title: __( 'title with lead' ), // Block title. 
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
 		__( 'mim-title-lead — CGB Block' ),
-		__( 'title' ),
+		__( 'title' ), 
 		__( 'lead' )
 	],
 	attributes: { 

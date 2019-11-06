@@ -16,4 +16,4 @@ import './block/block4.js';
 import './block/block5.js'; 
 import './block/block6.js';  
 import './block/block7.js';  
-import './block/block8.js';  
+import './block/block8.js';   
