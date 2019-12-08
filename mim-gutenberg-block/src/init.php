@@ -84,7 +84,7 @@ function mim_gutenberg_blocks_cgb_block_assets() { // phpcs:ignore
 			'editor_style'  => 'mim_gutenberg_blocks-cgb-block-editor-css',
 		)
 	);
-}
+} 
 
 // Hook: Block assets.
 add_action( 'init', 'mim_gutenberg_blocks_cgb_block_assets' );

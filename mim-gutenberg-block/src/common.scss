@@ -12,3 +12,47 @@ $gray: #dedede;
 $green: #bada55;
 $red: orangered; 
 $blue: blue;
+
+// for styles loaded in editor and in the view  
+
+// This class name is automatically generated for the blocks we make
+.wp-block-cgb-block-cgb {
+    background-color: yellow !important; 
+    // for simplicity, I'm going to wrap my block with the block name
+    // and then I can use common classes like copy or media without fear!
+
+    // Let's display the content in a row
+    display: flex;
+    // And let's center the items vertically
+    align-items: center;
+    padding:.5em;
+    //Set a font for the block
+    font-family: 'Avenir', 'Helvetica', sans-serif;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,.3);
+    
+
+    .media {
+        flex-shrink: 0; 
+        width: 35%;
+        margin-right: 1em;
+
+        & img {
+            // remove the annoying space underneath images
+            display: block;
+            width: 100%; 
+        }
+    }
+
+    // I'm choosing some of my own styles here
+    // You can do what you would like!
+    .copy .copy-hd {
+        font-size: 36px;
+        font-weight: 300;
+        margin: 0 0 22px 0;
+
+        // this is only required in 2019 theme... because they have these decorative lines
+        &:before {
+            display: none;
+        }
+    }
+}

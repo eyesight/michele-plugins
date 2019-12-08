@@ -4,3 +4,5 @@ node_modules
 /akismet
 /hello.php
 /wp-subtitle
+/health-check
+/wp-downgrade

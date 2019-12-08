@@ -22,16 +22,16 @@ const { RichText, getAutosave } = wp.blockEditor;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-text', {
+registerBlockType( 'cgb/block-mim-title-h3', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'text' ), // Block title. 
+	title: __( 'title h3' ), // Block title. 
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-text — CGB Block' ),
-		__( 'text' ),
-		__( 'copy' )
+		__( 'mim-title-h3 — CGB Block' ),
+		__( 'h3' ),
+		__( 'title' )
 	],
 	attributes: { 
 		txt: {
@@ -60,7 +60,7 @@ registerBlockType( 'cgb/block-mim-text', {
 		}
 
         return (
-			<RichText className="paragraph content" tagName='p' placeholder={__( 'Text' )} value={txt} onChange={onChangeTxt} />
+			<RichText className="title-h3 content" tagName='h3' placeholder={__( 'Title' )} value={txt} onChange={onChangeTxt} />
 		);
     },
     save: ( props ) => {
@@ -70,7 +70,7 @@ registerBlockType( 'cgb/block-mim-text', {
 		   }
 		} = props;
 		return (
-			<RichText.Content className="paragraph content" tagName='p' placeholder={__( 'Text' )} value={txt} />
+			<RichText.Content className="title-h3 content" tagName='h3' placeholder={__( 'Title' )} value={txt} />
 		);
 	 },
 } );

@@ -36,7 +36,7 @@ registerBlockType( 'cgb/block-mim-img', {
 	attributes: {
 		imgUrl: {
 			type: 'string',
-			default: 'http://placehold.it/400x300'
+			default: 'http://placehold.it/300x200'
 		},
 		isFullWidth: {
 			type: 'boolean'
@@ -56,9 +56,9 @@ registerBlockType( 'cgb/block-mim-img', {
 	 */
 	edit: ( props ) => {
 		const { attributes: { isFullWidth, imgUrl }, setAttributes } = props;
-
-
-		function selectImage(value) {
+		console.log('aaa');
+		function selectImage(value){
+			console.log(value);
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})

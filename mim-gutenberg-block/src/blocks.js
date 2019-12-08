@@ -17,3 +17,4 @@ import './block/list-container-inner.js';
 import './block/list-item-text.js';  
 import './block/list-item-title.js';  
 import './block/list-container-outer.js';
+import './block/h3.js';
