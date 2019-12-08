@@ -9,11 +9,11 @@
  * Webpack is compiling as the input file.
  */
 
-import './block/block.js';
-import './block/block2.js';
-import './block/block3.js';
-import './block/block4.js'; 
-import './block/block5.js'; 
-import './block/block6.js';  
-import './block/block7.js';  
-import './block/block8.js';   
+import './block/text.js';
+import './block/image.js';  
+import './block/image-with-text.js';
+import './block/title-with-image.js'; 
+import './block/list-container-inner.js'; 
+import './block/list-item-text.js';  
+import './block/list-item-title.js';  
+import './block/list-container-outer.js';

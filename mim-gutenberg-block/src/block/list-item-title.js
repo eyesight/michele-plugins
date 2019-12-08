@@ -7,7 +7,7 @@
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, getAutosave } = wp.editor; 
+const { RichText, getAutosave } = wp.blockEditor; 
 
 /**
  * Register: aa Gutenberg Block.
@@ -22,14 +22,14 @@ const { RichText, getAutosave } = wp.editor;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-list-item', {
+registerBlockType( 'cgb/block-mim-list-item-title', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'list-item text' ), // Block title. 
+	title: __( 'list-item title' ), // Block title. 
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-list-item — CGB Block' ),
+		__( 'mim-list-item-title — CGB Block' ),
 		__( 'list' ),
 		__( 'item' )
 	],
@@ -60,7 +60,7 @@ registerBlockType( 'cgb/block-mim-list-item', {
 		}
 
         return (
-			<RichText className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
+			<RichText className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
 		);
     },
     save: ( props ) => {
@@ -70,7 +70,7 @@ registerBlockType( 'cgb/block-mim-list-item', {
 		   }
 		} = props;
 		return (
-			<RichText.Content className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} />
+			<RichText.Content className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} />
 		);
 	 },
 } );

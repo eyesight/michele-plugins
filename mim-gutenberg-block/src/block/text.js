@@ -7,11 +7,11 @@
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, InspectorControls, MediaUpload } = wp.editor; 
+const { RichText, InspectorControls, MediaUpload } = wp.blockEditor; 
 const { PanelBody, PanelRow, FormToggle } = wp.components; 
 
 /**
- * Register: aa Gutenberg Block. 
+ * Register: aa Gutenberg Block.
  *
  * Registers a new block provided a unique name and an object defining its
  * behavior. Once registered, the block is made editor as an option to any
@@ -23,24 +23,23 @@ const { PanelBody, PanelRow, FormToggle } = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-img-title', { 
+registerBlockType( 'cgb/block-mim-text', {  
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'title with image' ), // Block title.
+	title: __( 'text' ), // Block title.
 	icon: 'align-left', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'title with image' ),
-		__( 'CGB Example' ),
-		__( 'create-guten-block' ), 
-	],
+		__( 'mim-text — CGB Block' ),
+		__( 'CGB Example' ), 
+		__( 'create-guten-block' ),
+	], 
 	attributes: {
 		imgUrl: {
 			type: 'string',
-			default: 'http://placehold.it/300x200'
+			default: 'http://placehold.it/600x500'
 		},
-	
-		heading: { 
-			type: 'string'
+		isFullWidth: {
+			type: 'boolean'
 		}
 	},
 
@@ -56,45 +55,45 @@ registerBlockType( 'cgb/block-mim-img-title', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, heading }, setAttributes } = props;
+		const { attributes: { isFullWidth, imgUrl }, setAttributes } = props;
 
 
 		function selectImage(value) {
-			console.log(value);
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
 		}
 	
-		function changeHeading(heading) {
-			// using some nice js features instead of typing
-			setAttributes({ heading: heading });
-		}
-	
 		return [
-			<div class="content title-image">
-				<div class="grid-container title-image__container">
-					<div class="title-image__image">
-						<MediaUpload 
-							onSelect={selectImage}
-							render={ ({open}) => {
-								return <img 
-									src={imgUrl}
-									onClick={open}
-									/>;
-							}}		
-						/>			
-					</div>
-						<div class="title-image__wrapper">
-							<RichText 
-								className="title-image__title"
-								tagName="h2"
-								placeholder="title"
-								value={heading}
-								onChange={changeHeading}
-							/>
-					</div>
-				</div>
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Full width', 'jsforwpblocks' ) }
+				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+							{ __( 'Full width', 'jsforwpblocks' ) }
+						</label>
+						<FormToggle
+							id="high-contrast-form-toggle"
+							label={ __( 'image is full width', 'jsforwpblocks' ) }
+							checked={ isFullWidth }
+							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
+						/>
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>, 
+			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+				<MediaUpload 
+					onSelect={selectImage}
+					render={ ({open}) => {
+						return <img 
+							src={imgUrl}
+							onClick={open}
+							/>;
+					}}
+					/>
 			</div>,
 		];
 	},
@@ -113,26 +112,14 @@ registerBlockType( 'cgb/block-mim-img-title', {
 	save: ( props ) => {
 		const {
 			attributes: {
-				heading,
-				imgUrl 
+				isFullWidth,
+				imgUrl
 			}
 		 } = props;
 	
 		return (
-			<div class="content title-image">
-				<div class="grid-container title-image__container">
-					<div class="title-image__image">
-						<img src={imgUrl} /> 		
-					</div>
-					<div class="title-image__wrapper">
-						<RichText.Content
-							className="title-image__title"
-							tagName="h2"
-							placeholder={__('Title')}
-							value={heading} 
-						/>
-					</div>
-				</div>
+			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+				<img src={imgUrl} />
 			</div>
 		);}
 } );
