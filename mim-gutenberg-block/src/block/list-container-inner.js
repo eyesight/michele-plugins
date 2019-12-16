@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InnerBlocks } from '@wordpress/editor';
 const { __ } = wp.i18n;
-const ALLOWED_BLOCKS = [ 'core/image', 'core/paragraph' ];
+const ALLOWED_BLOCKS = [ 'cgb/block-mim-list-item', 'cgb/block-mim-list-item-title' ];
 <InnerBlocks
     allowedBlocks={ ALLOWED_BLOCKS }
 />
@@ -22,7 +22,9 @@ registerBlockType( 'cgb/block-mim-list-container', {
     edit: function( props ) {
         return (
 			<div className='list__wrapper'>
-				<InnerBlocks />
+				<InnerBlocks 
+                    allowedBlocks={ ALLOWED_BLOCKS }
+                />
 			</div>
         );
     },

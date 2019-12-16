@@ -7,8 +7,10 @@
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, InspectorControls, MediaUpload } = wp.blockEditor; 
-const { PanelBody, PanelRow, FormToggle } = wp.components; 
+const { RichText, InspectorControls, MediaUpload } = wp.blockEditor;  
+
+const { PanelBody, PanelRow, FormToggle, TextControl } = wp.components; 
+
 
 /**
  * Register: aa Gutenberg Block.
@@ -45,6 +47,9 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 		
 		heading: { 
 			type: 'string'
+		},
+		text: {
+			type: 'string'
 		}
 	},
 
@@ -60,7 +65,7 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, bodyContent, heading }, setAttributes } = props;
+		const { attributes: { imgUrl, bodyContent, heading, text }, setAttributes } = props;
 
 
 		function selectImage(value) {
@@ -82,11 +87,34 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 			// using some nice js features instead of typing
 			setAttributes({ heading: heading });
 		}
+
+		function onChangeText(newText){
+            setAttributes( { text: newText } );
+        };
 	
 		return [
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Alt-text', 'alttxt' ) }
+				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+						</label>
+						<TextControl
+							id="alt-ext"
+							label={ __( 'alt-text', 'alttext' ) }
+							value={ text }
+							help="Text for screenreader. Leave blank when image is just used ad"
+							onChange={ onChangeText } 
+						/>
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>, 
 			<div class="content image-with-text">
 				<div class="grid-container image-with-text__container">
-					<div class="image-with-text__img">
+					<figure class="image-with-text__img">
 						<MediaUpload 
 							onSelect={selectImage}
 							render={ ({open}) => {
@@ -96,7 +124,7 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 									/>;
 							}}		
 						/>			
-					</div>
+					</figure>
 						<div class="image-with-text__text">
 							<RichText 
 								className="image-with-text__cat"
@@ -134,16 +162,17 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 			attributes: {
 				bodyContent,
 				heading,
-				imgUrl 
+				imgUrl,
+				text
 			}
 		 } = props;
 	
 		return (
 			<div class="content image-with-text">
 				<div class="grid-container image-with-text__container">
-					<div class="image-with-text__img">
-						<img src={imgUrl} /> 		
-					</div>
+					<figure class="image-with-text__img">
+						<img src={imgUrl} alt={text} /> 		
+					</figure>
 					<div class="image-with-text__text">
 						<RichText.Content
 							className="image-with-text__cat"

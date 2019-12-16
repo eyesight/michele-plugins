@@ -8,7 +8,9 @@
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { RichText, InspectorControls, MediaUpload } = wp.blockEditor; 
-const { PanelBody, PanelRow, FormToggle } = wp.components; 
+
+const { PanelBody, PanelRow, FormToggle, TextControl } = wp.components; 
+
 
 /**
  * Register: aa Gutenberg Block. 
@@ -41,6 +43,10 @@ registerBlockType( 'cgb/block-mim-img-title', {
 	
 		heading: { 
 			type: 'string'
+		},
+
+		text: {
+			type: 'string'
 		}
 	},
 
@@ -56,7 +62,7 @@ registerBlockType( 'cgb/block-mim-img-title', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, heading }, setAttributes } = props;
+		const { attributes: { imgUrl, heading, text }, setAttributes } = props;
 
 
 		function selectImage(value) {
@@ -70,11 +76,34 @@ registerBlockType( 'cgb/block-mim-img-title', {
 			// using some nice js features instead of typing
 			setAttributes({ heading: heading });
 		}
+
+		function onChangeText(newText){
+            setAttributes( { text: newText } );
+        };
 	
 		return [
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Alt-text', 'alttxt' ) }
+				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+						</label>
+						<TextControl
+							id="alt-ext"
+							label={ __( 'alt-text', 'alttext' ) }
+							value={ text }
+							help="Text for screenreader. Leave blank when image is just used ad"
+							onChange={ onChangeText } 
+						/>
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>, 
 			<div class="content title-image">
 				<div class="grid-container title-image__container">
-					<div class="title-image__image">
+					<figure class="title-image__image">
 						<MediaUpload 
 							onSelect={selectImage}
 							render={ ({open}) => {
@@ -84,7 +113,7 @@ registerBlockType( 'cgb/block-mim-img-title', {
 									/>;
 							}}		
 						/>			
-					</div>
+					</figure>
 						<div class="title-image__wrapper">
 							<RichText 
 								className="title-image__title"
@@ -114,16 +143,17 @@ registerBlockType( 'cgb/block-mim-img-title', {
 		const {
 			attributes: {
 				heading,
-				imgUrl 
+				imgUrl,
+				text
 			}
 		 } = props;
 	
 		return (
 			<div class="content title-image">
 				<div class="grid-container title-image__container">
-					<div class="title-image__image">
-						<img src={imgUrl} /> 		
-					</div>
+					<figure class="title-image__image">
+						<img src={imgUrl} alt={text} /> 		
+					</figure>
 					<div class="title-image__wrapper">
 						<RichText.Content
 							className="title-image__title"

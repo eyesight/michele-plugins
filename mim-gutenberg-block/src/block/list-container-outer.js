@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InnerBlocks } from '@wordpress/editor';
 const { __ } = wp.i18n;
-const ALLOWED_BLOCKS = [ 'core/image', 'core/paragraph' ];
+const ALLOWED_BLOCKS = [ 'cgb/block-mim-list-container' ];
 <InnerBlocks
     allowedBlocks={ ALLOWED_BLOCKS }
 />
@@ -23,7 +23,9 @@ registerBlockType( 'cgb/block-mim-list-outer-container', {
         return (
 			<div class="content list">
         		<div class="grid-container list__container">
-						<InnerBlocks />
+						<InnerBlocks 
+                            allowedBlocks={ ALLOWED_BLOCKS }
+                        />
 				</div>
 			</div>
         );

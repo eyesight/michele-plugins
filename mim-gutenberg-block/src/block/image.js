@@ -8,6 +8,8 @@
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { RichText, InspectorControls, MediaUpload } = wp.blockEditor;  
+const { TextControl } = wp.components;
+
 const { PanelBody, PanelRow, FormToggle } = wp.components; 
 
 /**
@@ -40,6 +42,9 @@ registerBlockType( 'cgb/block-mim-img', {
 		},
 		isFullWidth: {
 			type: 'boolean'
+		},
+		text: {
+			type: 'string'
 		}
 	},
 
@@ -55,36 +60,55 @@ registerBlockType( 'cgb/block-mim-img', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { isFullWidth, imgUrl }, setAttributes } = props;
-		console.log('aaa');
+		const { attributes: { isFullWidth, imgUrl, text }, setAttributes } = props;
 		function selectImage(value){
-			console.log(value);
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
 		}
+
+		function onChangeText(newText){
+            setAttributes( { text: newText } );
+        };
 	
 		return [
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Full width', 'jsforwpblocks' ) }
+					title={ __( 'Image size', 'jsforwpblocks' ) }
 				>
 					<PanelRow>
 						<label
-							htmlFor="high-contrast-form-toggle"
+							htmlFor="img-size-form-toggle"
 						>
 							{ __( 'Full width', 'jsforwpblocks' ) }
 						</label>
 						<FormToggle
-							id="high-contrast-form-toggle"
+							id="img-size-form-toggle"
 							label={ __( 'image is full width', 'jsforwpblocks' ) }
 							checked={ isFullWidth }
 							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
 						/>
 					</PanelRow>
 				</PanelBody>
+				<PanelBody
+					title={ __( 'Alt-text', 'alttxt' ) }
+				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+						</label>
+						<TextControl
+							id="alt-ext"
+							label={ __( 'alt-text', 'alttext' ) }
+							value={ text }
+							help="Text for screenreader. Leave blank when image is just used ad"
+							onChange={ onChangeText } 
+						/>
+					</PanelRow>
+				</PanelBody>
 			</InspectorControls>, 
-			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
 				<MediaUpload 
 					onSelect={selectImage}
 					render={ ({open}) => {
@@ -92,9 +116,9 @@ registerBlockType( 'cgb/block-mim-img', {
 							src={imgUrl}
 							onClick={open}
 							/>;
-					}}
+					}} 
 					/>
-			</div>,
+			</figure>,
 		];
 	},
 
@@ -113,13 +137,14 @@ registerBlockType( 'cgb/block-mim-img', {
 		const {
 			attributes: {
 				isFullWidth,
-				imgUrl
+				imgUrl,
+				text
 			}
 		 } = props;
 	
 		return (
-			<div className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
-				<img src={imgUrl} />
-			</div>
+			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+				<img src={imgUrl} alt={text} />
+			</figure>
 		);}
 } );
