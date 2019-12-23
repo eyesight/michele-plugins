@@ -22,14 +22,14 @@ const { RichText, getAutosave } = wp.blockEditor;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-list-item-title', {
+registerBlockType( 'cgb/block-mim-list-item', {
 
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'list-item title' ), // Block title. 
-	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
+	title: __( 'list-item text' ), // Block title. 
+	icon: 'format-aside', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-list-item-title — CGB Block' ),
+		__( 'mim-list-item — CGB Block' ),
 		__( 'list' ),
 		__( 'item' )
 	],
@@ -60,7 +60,7 @@ registerBlockType( 'cgb/block-mim-list-item-title', {
 		}
 
         return (
-			<RichText className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
+			<RichText className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
 		);
     },
     save: ( props ) => {
@@ -70,7 +70,7 @@ registerBlockType( 'cgb/block-mim-list-item-title', {
 		   }
 		} = props;
 		return (
-			<RichText.Content className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} />
+			<RichText.Content className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} />
 		);
 	 },
 } );

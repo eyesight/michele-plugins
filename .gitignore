@@ -7,3 +7,6 @@ node_modules
 /health-check
 /wp-downgrade
 /a3-lazy-load
+/simple-mail-address-encoder
+/wordpress-seo
+/wp-optimize

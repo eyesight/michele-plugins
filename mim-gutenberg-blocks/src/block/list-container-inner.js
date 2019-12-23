@@ -7,7 +7,7 @@ const ALLOWED_BLOCKS = [ 'cgb/block-mim-list-item', 'cgb/block-mim-list-item-tit
 />
 registerBlockType( 'cgb/block-mim-list-container', {
     title: __( 'list-container inner' ),
-    icon: 'universal-access-alt',
+    icon: 'welcome-write-blog',
 	category: 'common',
 	keywords: [
 		__( 'mim-list-container — CGB Block' ),

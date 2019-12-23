@@ -8,9 +8,9 @@
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { RichText, InspectorControls, MediaUpload } = wp.blockEditor;  
+const { TextControl } = wp.components;
 
-const { PanelBody, PanelRow, FormToggle, TextControl } = wp.components; 
-
+const { PanelBody, PanelRow, FormToggle } = wp.components;  
 
 /**
  * Register: aa Gutenberg Block.
@@ -25,29 +25,24 @@ const { PanelBody, PanelRow, FormToggle, TextControl } = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-img-txt', { 
+registerBlockType( 'cgb/block-mim-img', {  
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'image with text' ), // Block title.
-	icon: 'align-left', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
+	title: __( 'image default' ), // Block title.
+	icon: 'format-image', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'image with text' ),
-		__( 'CGB Example' ),
+		__( 'mim-img — CGB Block' ), 
+		__( 'CGB Example' ), 
 		__( 'create-guten-block' ),
-	],
+	], 
 	attributes: {
 		imgUrl: {
 			type: 'string',
-			default: 'http://placehold.it/400x300'
+			default: 'http://placehold.it/300x200'
 		},
-		
-		bodyContent: {
-			type: 'string' 
-		},
-		
-		heading: { 
-			type: 'string'
-		},
+		isFullWidth: {
+			type: 'boolean'
+		}, 
 		text: {
 			type: 'string'
 		}
@@ -65,27 +60,11 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, bodyContent, heading, text }, setAttributes } = props;
-
-
-		function selectImage(value) {
-			console.log(value);
+		const { attributes: { isFullWidth, imgUrl, text }, setAttributes } = props;
+		function selectImage(value){
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
-		}
-	
-		// we create a function that will take the changes from RichText
-		// and update the attributes
-		function changeBodyContent(changes) {
-			setAttributes({
-				bodyContent: changes
-			})
-		}
-	
-		function changeHeading(heading) {
-			// using some nice js features instead of typing
-			setAttributes({ heading: heading });
 		}
 
 		function onChangeText(newText){
@@ -94,6 +73,23 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 	
 		return [
 			<InspectorControls>
+				<PanelBody
+					title={ __( 'Image size', 'jsforwpblocks' ) }
+				>
+					<PanelRow>
+						<label
+							htmlFor="img-size-form-toggle"
+						>
+							{ __( 'Full width', 'jsforwpblocks' ) }
+						</label>
+						<FormToggle
+							id="img-size-form-toggle"
+							label={ __( 'image is full width', 'jsforwpblocks' ) }
+							checked={ isFullWidth }
+							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
+						/>
+					</PanelRow>
+				</PanelBody>
 				<PanelBody
 					title={ __( 'Alt-text', 'alttxt' ) }
 				>
@@ -112,37 +108,17 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>, 
-			<div class="content image-with-text">
-				<div class="grid-container image-with-text__container">
-					<figure class="image-with-text__img">
-						<MediaUpload 
-							onSelect={selectImage}
-							render={ ({open}) => {
-								return <img 
-									src={imgUrl}
-									onClick={open}
-									/>;
-							}}		
-						/>			
-					</figure>
-						<div class="image-with-text__text">
-							<RichText 
-								className="image-with-text__cat"
-								tagName="p"
-								placeholder="title"
-								value={heading}
-								onChange={changeHeading}
-							/>
-							<RichText 
-								className="image-with-text__txt"
-								tagName="p"
-								placeholder="Enter your text here"
-								value={bodyContent}
-								onChange={changeBodyContent}
-							/>
-					</div>
-				</div>
-			</div>,
+			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+				<MediaUpload 
+					onSelect={selectImage}
+					render={ ({open}) => {
+						return <img 
+							src={imgUrl}
+							onClick={open}
+							/>;
+					}} 
+					/>
+			</figure>,
 		];
 	},
 
@@ -160,35 +136,15 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 	save: ( props ) => {
 		const {
 			attributes: {
-				bodyContent,
-				heading,
+				isFullWidth,
 				imgUrl,
 				text
 			}
 		 } = props;
 	
 		return (
-			<div class="content image-with-text">
-				<div class="grid-container image-with-text__container">
-					<figure class="image-with-text__img">
-						<img src={imgUrl} alt={text} /> 		
-					</figure>
-					<div class="image-with-text__text">
-						<RichText.Content
-							className="image-with-text__cat"
-							tagName="p"
-							placeholder={__('Title')}
-							value={heading}
-						/>
-
-						<RichText.Content 
-							className="image-with-text__txt"
-							tagName="p"
-							placeholder={__('Text')}
-							value={bodyContent}
-						/>
-					</div>
-				</div>
-			</div>
+			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+				<img src={imgUrl} alt={text} />
+			</figure>
 		);}
 } );
