@@ -4,11 +4,17 @@ function setBlockCustomClassName( className, blockName ) {
         className;
 }
  
+
+wp.blocks.registerBlockStyle( 'core/image', {
+    name: 'image--full-with',
+    label: 'image full size',
+    isDefault: true
+} );
+
+
 // Adding the filter
 wp.hooks.addFilter(
     'blocks.getBlockDefaultClassName',
     'my-plugin/set-block-custom-class-name',
     setBlockCustomClassName
 );
-
-//wp.blocks.unregisterBlockStyle( 'core/image', 'large' );
