@@ -1,6 +1,7 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/Users/claudia/.nvm/versions/node/v6.5.0/bin/node',
 1 verbose cli   '/Users/claudia/.nvm/versions/node/v6.5.0/bin/npm',
+1 verbose cli   'run',
 1 verbose cli   'start' ]
 2 info using npm@3.10.3
 3 info using node@v6.5.0
@@ -27,7 +28,7 @@
 15 verbose pkgid mim-gutenberg-blocks-cgb-guten-block@1.0.0
 16 verbose cwd /Applications/MAMP/htdocs/michelle/wp-content/plugins/mim-gutenberg-block
 17 error Darwin 19.2.0
-18 error argv "/Users/claudia/.nvm/versions/node/v6.5.0/bin/node" "/Users/claudia/.nvm/versions/node/v6.5.0/bin/npm" "start"
+18 error argv "/Users/claudia/.nvm/versions/node/v6.5.0/bin/node" "/Users/claudia/.nvm/versions/node/v6.5.0/bin/npm" "run" "start"
 19 error node v6.5.0
 20 error npm  v3.10.3
 21 error code ELIFECYCLE

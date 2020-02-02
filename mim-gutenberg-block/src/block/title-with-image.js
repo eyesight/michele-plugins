@@ -47,7 +47,10 @@ registerBlockType( 'cgb/block-mim-img-title', {
 
 		text: {
 			type: 'string'
-		}
+		},
+		isBig: {
+			type: 'boolean'
+		} 
 	},
 
 	/**
@@ -62,11 +65,10 @@ registerBlockType( 'cgb/block-mim-img-title', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, heading, text }, setAttributes } = props;
+		const { attributes: { imgUrl, heading, text, isBig }, setAttributes } = props;
 
 
 		function selectImage(value) {
-			console.log(value);
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
@@ -99,6 +101,19 @@ registerBlockType( 'cgb/block-mim-img-title', {
 							onChange={ onChangeText } 
 						/>
 					</PanelRow>
+					<PanelRow>
+						<label
+							htmlFor="title-size-form-toggle"
+						>
+							{ __( 'Big Title', 'jsforwpblocks' ) }
+						</label>
+						<FormToggle
+							id="title-size-form-toggle"
+							label={ __( 'big title', 'jsforwpblocks' ) }
+							checked={ isBig }
+							onChange={ () => setAttributes( {isBig: ! isBig } ) }
+						/>
+					</PanelRow>
 				</PanelBody>
 			</InspectorControls>, 
 			<div class="content title-image">
@@ -114,7 +129,7 @@ registerBlockType( 'cgb/block-mim-img-title', {
 							}}		
 						/>			
 					</figure>
-						<div class="title-image__wrapper">
+						<div className={!isBig ? 'title-image__wrapper' : 'title-image__wrapper title-image__wrapper--big'}>
 							<RichText 
 								className="title-image__title"
 								tagName="h2"
@@ -144,7 +159,8 @@ registerBlockType( 'cgb/block-mim-img-title', {
 			attributes: {
 				heading,
 				imgUrl,
-				text
+				text,
+				isBig
 			}
 		 } = props;
 	
@@ -154,7 +170,7 @@ registerBlockType( 'cgb/block-mim-img-title', {
 					<figure class="title-image__image">
 						<img src={imgUrl} alt={text} /> 		
 					</figure>
-					<div class="title-image__wrapper">
+					<div className={!isBig ? 'title-image__wrapper' : 'title-image__wrapper title-image__wrapper--big'}>
 						<RichText.Content
 							className="title-image__title"
 							tagName="h2"
