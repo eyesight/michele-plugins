@@ -102,7 +102,7 @@ registerBlockType( 'cgb/block-mim-img', {
 							id="alt-ext"
 							label={ __( 'alt-text', 'alttext' ) }
 							value={ text }
-							help="Text for screenreader. Leave blank when image is just used ad"
+							help="Text for screenreader. Leave blank when image is just used as decorative"
 							onChange={ onChangeText } 
 						/>
 					</PanelRow>

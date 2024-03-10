@@ -56,3 +56,14 @@ $blue: blue;
         }
     }
 }
+
+.wp-block-image .components-resizable-box__container img {
+    display: inline-block;
+    width: 100%;
+}
+
+.wp-block-image .components-resizable-box__container {
+    max-width: 100% !important;
+    max-height: auto !important;
+    display: block !important;
+}

@@ -8,7 +8,8 @@
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { RichText, InspectorControls, MediaUpload } = wp.blockEditor;  
-const { TextControl } = wp.components;
+const { TextControl, RadioControl } = wp.components;
+const { useState } = wp.element;
 
 const { PanelBody, PanelRow, FormToggle } = wp.components;  
 
@@ -25,26 +26,26 @@ const { PanelBody, PanelRow, FormToggle } = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-mim-video', {  
+registerBlockType( 'cgb/block-mim-img-sizes', {  
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'Video Youtube/Vimeo' ), // Block title.
+	title: __( 'Bild div. Grössen' ), // Block title.
 	icon: 'format-image', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'mim-video — CGB Block' ), 
-		__( 'CGB Example' ), 
-		__( 'create-guten-block' ),
+		__( 'mim-img — CGB Block' )
 	], 
 	attributes: {
-		videoUrl: {
+		imgUrl: {
 			type: 'string',
+			default: 'http://placehold.it/300x200'
 		},
-		isFullWidth: {
-			type: 'boolean'
-		}, 
 		text: {
 			type: 'string'
-		}
+		},
+		selectedOption: {
+            type: 'string',
+            default: 'image--col-12',
+        },
 	},
 
 	/**
@@ -59,54 +60,78 @@ registerBlockType( 'cgb/block-mim-video', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { isFullWidth, videoUrl }, setAttributes } = props;
-		function onChangeUrl(value){
+		const { attributes: { imgUrl, text, selectedOption }, setAttributes } = props;
+
+        const onChangeRadio = (option) => {
+            setAttributes({ selectedOption: option });
+        };
+
+        const options = [
+            { label: '100% / 12 Spalten', value: 'image--col-12' },
+            { label: '11 Spalten', value: 'image--col-11' },
+            { label: '10 Spalten', value: 'image--col-10' },
+			{ label: '9 Spalten', value: 'image--col-9' },
+            { label: '8 Spalten', value: 'image--col-8' },
+            { label: '7 Spalten', value: 'image--col-7' },
+            { label: '6 Spalten', value: 'image--col-6' },
+            { label: '5 Spalten', value: 'image--col-5' },
+            { label: '4 Spalten', value: 'image--col-4' },
+			{ label: '4 Spalten', value: 'image--col-3' }
+        ];
+
+		function selectImage(value){
 			setAttributes({
-				videoUrl: value,
+				imgUrl: value.sizes.full.url,
 			})
 		}
 
-		const markup = { __html: videoUrl };
-
+		function onChangeText(newText){
+            setAttributes( { text: newText } );
+        };
+	
 		return [
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Image size', 'jsforwpblocks' ) }
+					title={ __( 'Bildgrössen', 'imgsize' ) }
 				>
 					<PanelRow>
-						<label 
-							htmlFor="img-size-form-toggle"
-						>
-							{ __( 'Full width', 'jsforwpblocks' ) }
-						</label>
-						<FormToggle
-							id="img-size-form-toggle"
-							label={ __( 'image is full width', 'jsforwpblocks' ) }
-							checked={ isFullWidth }
-							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
+						<RadioControl
+							label="Wähle Grösse"
+							selected={selectedOption}
+							options={options}
+							onChange={onChangeRadio}
 						/>
 					</PanelRow>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Url', 'videoUrl' ) }
+					title={ __( 'Alt-text', 'alttxt' ) }
 				>
 					<PanelRow>
 						<label
-							htmlFor="title-size-form-toggle"
+							htmlFor="high-contrast-form-toggle"
 						>
 						</label>
 						<TextControl
-							id="title-size-form-toggle"
-							label={ __( 'iFrame Code', 'jsforwpblocks' ) }
-							value={ videoUrl }
-							help="Teilen und dabei Einbetten wählen und alles kopieren"
-							onChange={ onChangeUrl } 
+							id="alt-ext"
+							label={ __( 'alt-text', 'alttext' ) }
+							value={ text }
+							help="Text for screenreader. Leave blank when image is just used as decorative"
+							onChange={ onChangeText } 
 						/>
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>, 
-			<div className={!isFullWidth ? `embedVideo` : `embedVideo embedVideo--full-with`} dangerouslySetInnerHTML={markup}>
-			</div>,
+			<figure className={`image ${selectedOption}`} >
+				<MediaUpload 
+					onSelect={selectImage}
+					render={ ({open}) => {
+						return <img 
+							src={imgUrl}
+							onClick={open}
+							/>;
+					}} 
+					/>
+			</figure>,
 		];
 	},
 
@@ -124,14 +149,15 @@ registerBlockType( 'cgb/block-mim-video', {
 	save: ( props ) => {
 		const {
 			attributes: {
-				isFullWidth,
-				videoUrl}
+				imgUrl,
+				text,
+				selectedOption
+			}
 		 } = props;
-
-		 const markup = { __html: videoUrl };
-
+	
 		return (
-			<div className={!isFullWidth ? `embedVideo` : `embedVideo embedVideo--full-with`} dangerouslySetInnerHTML={markup}>	
-			</div>
+			<figure className={`image ${selectedOption}`} >
+				<img src={imgUrl} alt={text} />
+			</figure>
 		);}
 } );
