@@ -1,5 +1,5 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/editor';
+import { InnerBlocks } from '@wordpress/block-editor';
 const { __ } = wp.i18n;
 const ALLOWED_BLOCKS = [ 'cgb/block-mim-list-container' ];
 <InnerBlocks

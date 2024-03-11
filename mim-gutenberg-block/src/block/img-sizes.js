@@ -76,7 +76,7 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
             { label: '6 Spalten', value: 'image--col-6' },
             { label: '5 Spalten', value: 'image--col-5' },
             { label: '4 Spalten', value: 'image--col-4' },
-			{ label: '4 Spalten', value: 'image--col-3' }
+			{ label: '3 Spalten', value: 'image--col-3' }
         ];
 
 		function selectImage(value){
