@@ -21,8 +21,8 @@ registerBlockType( 'cgb/block-mim-list-outer-container', {
     },
     edit: function( props ) {
         return (
-			<div class="content list">
-        		<div class="grid-container list__container">
+			<div className="content list">
+        		<div className="grid-container list__container">
 						<InnerBlocks 
                             allowedBlocks={ ALLOWED_BLOCKS }
                         />
@@ -32,11 +32,11 @@ registerBlockType( 'cgb/block-mim-list-outer-container', {
     },
     save: function( props ) {
         return (
-            <div class="content list">
-        		<div class="grid-container list__container">
-                		<InnerBlocks.Content />
-				</div>
-			</div>
+            <div className="content list">
+                <div className="grid-container list__container">
+                    <InnerBlocks.Content />
+                </div>
+            </div>
         );
     },
 } );
