@@ -60,7 +60,7 @@ registerBlockType( 'cgb/block-mim-list-item-title', {
 		}
 
         return (
-			<RichText className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
+			<RichText className="list__title" tagName='h2' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
 		);
     },
     save: ( props ) => {
@@ -70,7 +70,7 @@ registerBlockType( 'cgb/block-mim-list-item-title', {
 		   }
 		} = props;
 		return (
-			<RichText.Content className="list__title" tagName='h3' placeholder={__( 'Listitem' )} value={txt} />
+			<RichText.Content className="list__title" tagName='h2' placeholder={__( 'Listitem' )} value={txt} />
 		);
 	 },
 } );
