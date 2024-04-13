@@ -42,6 +42,9 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 		text: {
 			type: 'string'
 		},
+		caption: {
+			type: 'string'
+		},
 		selectedOption: {
             type: 'string',
             default: 'image--col-12',
@@ -60,7 +63,7 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { imgUrl, text, selectedOption }, setAttributes } = props;
+		const { attributes: { imgUrl, text, selectedOption, caption }, setAttributes } = props;
 
         const onChangeRadio = (option) => {
             setAttributes({ selectedOption: option });
@@ -88,6 +91,10 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 		function onChangeText(newText){
             setAttributes( { text: newText } );
         };
+
+		function onChangeCaption(newText){
+            setAttributes( { caption: newText } );
+        };
 	
 		return [
 			<InspectorControls>
@@ -104,8 +111,21 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 					</PanelRow>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Alt-text', 'alttxt' ) }
+					title={ __( 'Bildlegende und Alt-text', 'alttxt' ) }
 				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+						</label>
+						<TextControl
+							id="caption"
+							label={ __( 'Bildlegende', 'caption' ) }
+							value={ caption }
+							help="Bildlegende (optional)"
+							onChange={ onChangeCaption } 
+						/>
+					</PanelRow>
 					<PanelRow>
 						<label
 							htmlFor="high-contrast-form-toggle"
@@ -115,7 +135,7 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 							id="alt-ext"
 							label={ __( 'alt-text', 'alttext' ) }
 							value={ text }
-							help="Text for screenreader. Leave blank when image is just used as decorative"
+							help="Text ist für Screenreader und nicht sichtbar. Leer lassen, wenn das Bild rein dekorativ ist."
 							onChange={ onChangeText } 
 						/>
 					</PanelRow>
@@ -131,6 +151,7 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 							/>;
 					}} 
 					/>
+				{caption && <figcaption className="image__caption">{caption}</figcaption>}
 			</figure>,
 		];
 	},
@@ -151,13 +172,15 @@ registerBlockType( 'cgb/block-mim-img-sizes', {
 			attributes: {
 				imgUrl,
 				text,
-				selectedOption
+				selectedOption,
+				caption
 			}
 		 } = props;
 	
 		return (
 			<figure className={`image ${selectedOption}`} >
 				<img src={imgUrl} alt={text} />
+				{caption && <figcaption className="image__caption">{caption}</figcaption>}
 			</figure>
 		);}
 } );

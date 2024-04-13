@@ -27,7 +27,7 @@ const { PanelBody, PanelRow, FormToggle } = wp.components;
  */
 registerBlockType( 'cgb/block-mim-img', {  
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'Bild unbearbeitbar' ), // Block title.
+	title: __( 'Bild ganze Breite' ), // Block title.
 	icon: 'format-image', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
@@ -45,6 +45,9 @@ registerBlockType( 'cgb/block-mim-img', {
 		}, 
 		text: {
 			type: 'string'
+		},
+		caption: {
+			type: 'string'
 		}
 	},
 
@@ -60,15 +63,19 @@ registerBlockType( 'cgb/block-mim-img', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { isFullWidth, imgUrl, text }, setAttributes } = props;
+		const { attributes: { isFullWidth, imgUrl, text, caption }, setAttributes } = props;
 		function selectImage(value){
 			setAttributes({
 				imgUrl: value.sizes.full.url,
 			})
 		}
 
-		function onChangeText(newText){
+		function onChangeAltText(newText){
             setAttributes( { text: newText } );
+        };
+
+		function onChangeCaption(newText){
+            setAttributes( { caption: newText } );
         };
 	
 		return [
@@ -91,8 +98,21 @@ registerBlockType( 'cgb/block-mim-img', {
 					</PanelRow>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Alt-text', 'alttxt' ) }
+					title={ __( 'Bildlegende und Alt-text', 'alttxt' ) }
 				>
+					<PanelRow>
+						<label
+							htmlFor="high-contrast-form-toggle"
+						>
+						</label>
+						<TextControl
+							id="caption"
+							label={ __( 'Bildlegende', 'caption' ) }
+							value={ caption }
+							help="Bildlegende (optional)"
+							onChange={ onChangeCaption } 
+						/>
+					</PanelRow>
 					<PanelRow>
 						<label
 							htmlFor="high-contrast-form-toggle"
@@ -102,8 +122,8 @@ registerBlockType( 'cgb/block-mim-img', {
 							id="alt-ext"
 							label={ __( 'alt-text', 'alttext' ) }
 							value={ text }
-							help="Text for screenreader. Leave blank when image is just used as decorative"
-							onChange={ onChangeText } 
+							help="Text ist für Screenreader und nicht sichtbar. Leer lassen, wenn das Bild rein dekorativ ist."
+							onChange={ onChangeAltText } 
 						/>
 					</PanelRow>
 				</PanelBody>
@@ -118,6 +138,7 @@ registerBlockType( 'cgb/block-mim-img', {
 							/>;
 					}} 
 					/>
+					{caption && <figcaption className="image__caption">{caption}</figcaption>}
 			</figure>,
 		];
 	},
@@ -138,13 +159,15 @@ registerBlockType( 'cgb/block-mim-img', {
 			attributes: {
 				isFullWidth,
 				imgUrl,
-				text
+				text,
+				caption
 			}
 		 } = props;
 	
 		return (
 			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
 				<img src={imgUrl} alt={text} />
-			</figure>
+				{caption && <figcaption className="image__caption">{caption}</figcaption>}
+			</figure> 
 		);}
 } );

@@ -106,7 +106,7 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 							id="alt-ext"
 							label={ __( 'alt-text', 'alttext' ) }
 							value={ text }
-							help="Text for screenreader. Leave blank when image is just used ad"
+							help="Text ist für Screenreader und nicht sichtbar. Leer lassen, wenn das Bild rein dekorativ ist."
 							onChange={ onChangeText } 
 						/>
 					</PanelRow>
@@ -124,7 +124,7 @@ registerBlockType( 'cgb/block-mim-img-txt', {
 									/>;
 							}}		
 						/>			
-					</figure>
+					</figure> 
 						<div class="image-with-text__text">
 							<RichText 
 								className="image-with-text__cat"
