@@ -3,7 +3,7 @@ import { InnerBlocks } from '@wordpress/block-editor';
 const { __ } = wp.i18n;
 const { ToggleControl } = wp.components;
 
-const ALLOWED_BLOCKS = [ 'cgb/block-mim-img-sizes' ];
+const ALLOWED_BLOCKS = [ 'cgb/block-mim-img-sizes', 'core/video' ];
 
 registerBlockType( 'cgb/block-mim-image-container', {
     title: __( 'Bild-Container' ), 
@@ -17,6 +17,10 @@ registerBlockType( 'cgb/block-mim-image-container', {
             type: 'boolean',
             default: false,
         },
+        isCentered: {
+            type: 'boolean',
+            default: false,
+        },
     },
     getEditWrapperProps: function () {
         return {
@@ -25,7 +29,14 @@ registerBlockType( 'cgb/block-mim-image-container', {
     },
     edit: function( props ) {
         const { attributes, setAttributes } = props;
-        const { addClassName } = attributes;
+        const { addClassName, isCentered } = attributes;
+
+        const containerClasses = [
+            'grid-container',
+            'image-container',
+            addClassName ? 'image-container--space-between' : '',
+            isCentered ? 'image-container--center' : ''
+        ].join(' ').trim();
 
         return (
             <div className="content">
@@ -34,7 +45,12 @@ registerBlockType( 'cgb/block-mim-image-container', {
                     checked={ addClassName }
                     onChange={ () => setAttributes( { addClassName: !addClassName } ) }
                 />
-                <div className={ `grid-container image-container${ addClassName ? ' image-container--space-between' : '' }` }>
+                <ToggleControl
+                    label={ __( 'Zentrieren' ) }
+                    checked={ isCentered }
+                    onChange={ () => setAttributes( { isCentered: !isCentered } ) }
+                />
+                <div className={ containerClasses }>
                     <InnerBlocks 
                         allowedBlocks={ ALLOWED_BLOCKS }
                     />
@@ -44,11 +60,18 @@ registerBlockType( 'cgb/block-mim-image-container', {
     },
     save: function( props ) {
         const { attributes } = props;
-        const { addClassName } = attributes;
+        const { addClassName, isCentered } = attributes;
+
+        const containerClasses = [
+            'grid-container',
+            'image-container',
+            addClassName ? 'image-container--space-between' : '',
+            isCentered ? 'image-container--center' : ''
+        ].join(' ').trim();
 
         return (
             <div className="content">
-                <div className={ `grid-container image-container${ addClassName ? ' image-container--space-between' : '' }` }>
+                <div className={ containerClasses }>
                     <InnerBlocks.Content />
                 </div>
             </div>
