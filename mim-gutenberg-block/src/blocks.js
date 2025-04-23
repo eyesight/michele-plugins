@@ -21,4 +21,5 @@ import './block/h3.js';
 import './block/default-image.js';
 import './block/video.js'; 
 import './block/image-container.js'; 
-import './block/img-sizes.js'; 
+import './block/accordion.js'; 
+import './block/accordion-item.js'; 
