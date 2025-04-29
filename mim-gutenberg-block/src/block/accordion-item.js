@@ -34,14 +34,16 @@ registerBlockType('cgb/block-mim-accordion-item', {
                         onChange={(value) => setAttributes({ title: value })}
                     />
                 </div>
-                <RichText
-                    tagName="div"
-                    multiline="p"
-                    className="accordion-item__content"
-                    placeholder={__('Accordion Content')}
-                    value={content}
-                    onChange={(value) => setAttributes({ content: value })}
-                />
+                <div className="accordion-item__content">
+                    <RichText
+                        tagName="div"
+                        multiline="p"
+                        className="accordion-item__content-inner"
+                        placeholder={__('Accordion Content')}
+                        value={content}
+                        onChange={(value) => setAttributes({ content: value })}
+                    />
+                </div>
             </div>
         );
     },
@@ -57,7 +59,9 @@ registerBlockType('cgb/block-mim-accordion-item', {
                     </h3>
                 </button>
                 <div className="accordion-item__content">
-                    <RichText.Content value={content} />
+                    <div className="accordion-item__content-inner">
+                        <RichText.Content value={content} />
+                    </div>
                 </div>
             </div>
         );
