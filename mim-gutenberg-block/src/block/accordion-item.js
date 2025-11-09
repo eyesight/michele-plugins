@@ -1,12 +1,13 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { RichText, InnerBlocks } = wp.blockEditor;
+const { RichText } = wp.blockEditor;
 
 registerBlockType('cgb/block-mim-accordion-item', {
     title: __('Accordion Item'),
     icon: 'excerpt-view',
     category: 'layout',
     parent: ['cgb/block-mim-accordion'],
+
     attributes: {
         title: {
             type: 'string',
@@ -16,13 +17,11 @@ registerBlockType('cgb/block-mim-accordion-item', {
         content: {
             type: 'string',
             source: 'html',
-            selector: '.accordion-item__content',
+            selector: '.accordion-item__content-inner',
         },
     },
 
-    edit: (props) => {
-        const { attributes: { title, content }, setAttributes } = props;
-
+    edit: ({ attributes: { title, content }, setAttributes }) => {
         return (
             <div className="accordion-item">
                 <div className="accordion-item__button js-toggle-accordion">
@@ -34,23 +33,23 @@ registerBlockType('cgb/block-mim-accordion-item', {
                         onChange={(value) => setAttributes({ title: value })}
                     />
                 </div>
+
                 <div className="accordion-item__content">
-                    <RichText
-                        tagName="div"
-                        multiline="p"
-                        className="accordion-item__content-inner"
-                        placeholder={__('Accordion Content')}
-                        value={content}
-                        onChange={(value) => setAttributes({ content: value })}
-                    />
+                    <div className="accordion-item__content-inner">
+                        <RichText
+                            tagName="div"
+                            multiline="p"
+                            placeholder={__('Accordion Content')}
+                            value={content}
+                            onChange={(value) => setAttributes({ content: value })}
+                        />
+                    </div>
                 </div>
             </div>
         );
     },
 
-    save: (props) => {
-        const { attributes: { title, content } } = props;
-
+    save: ({ attributes: { title, content } }) => {
         return (
             <div className="accordion-item">
                 <button className="accordion-item__button js-toggle-accordion">
@@ -58,6 +57,7 @@ registerBlockType('cgb/block-mim-accordion-item', {
                         <RichText.Content value={title} />
                     </h3>
                 </button>
+
                 <div className="accordion-item__content">
                     <div className="accordion-item__content-inner">
                         <RichText.Content value={content} />
@@ -65,5 +65,5 @@ registerBlockType('cgb/block-mim-accordion-item', {
                 </div>
             </div>
         );
-    }
+    },
 });
