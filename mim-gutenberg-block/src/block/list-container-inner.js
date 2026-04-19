@@ -1,38 +1,56 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+
 const { __ } = wp.i18n;
-const ALLOWED_BLOCKS = [ 'cgb/block-mim-list-item', 'cgb/block-mim-list-item-title' ];
-<InnerBlocks
-    allowedBlocks={ ALLOWED_BLOCKS }
-/>
-registerBlockType( 'cgb/block-mim-list-container', {
-    title: __( 'list-container inner' ),
-    icon: 'welcome-write-blog',
+
+const ALLOWED_BLOCKS = [
+	'cgb/block-mim-list-item',
+	'cgb/block-mim-list-item-title'
+];
+
+registerBlockType('cgb/block-mim-list-container', {
+
+	apiVersion: 3,
+
+	title: __('list-container inner'),
+	icon: 'welcome-write-blog',
 	category: 'common',
+
 	keywords: [
-		__( 'mim-list-container — CGB Block' ),
-		__( 'CGB Example' ),
-		__( 'create-guten-block' ), 
+		__('mim-list-container — CGB Block'),
+		__('CGB Example'),
+		__('create-guten-block')
 	],
-    getEditWrapperProps: function () {
-        return {
-            "data-align": "full"
-        };
-    },
-    edit: function( props ) {
-        return (
-			<div className='list__wrapper'>
-				<InnerBlocks 
-                    allowedBlocks={ ALLOWED_BLOCKS }
-                />
+
+	// ❌ nicht mehr nötig in modernem iframe editor
+	// getEditWrapperProps() entfernt
+
+	edit: () => {
+
+		const blockProps = useBlockProps({
+			className: 'list__wrapper'
+		});
+
+		return (
+			<div {...blockProps}>
+				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
 			</div>
-        );
-    },
-    save: function( props ) {
-        return (
-			<div className='list__wrapper'>
+		);
+
+	},
+
+	save: () => {
+
+		const blockProps = useBlockProps.save({
+			className: 'list__wrapper'
+		});
+
+		return (
+			<div {...blockProps}>
 				<InnerBlocks.Content />
 			</div>
-        );
-    },
-} );
+		);
+
+	}
+
+});

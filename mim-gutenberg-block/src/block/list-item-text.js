@@ -1,76 +1,77 @@
-/**
- * BLOCK: mim-title-lead
- *
- * Registering a basic block with Gutenberg.
- * Simple block, renders and saves the same content without any interactivity.
- */
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, getAutosave } = wp.blockEditor; 
+const {
+	RichText,
+	useBlockProps
+} = wp.blockEditor;
 
-/**
- * Register: aa Gutenberg Block.
- *
- * Registers a new block provided a unique name and an object defining its
- * behavior. Once registered, the block is made editor as an option to any
- * editor interface where blocks are implemented.
- *
- * @link https://wordpress.org/gutenberg/handbook/block-api/
- * @param  {string}   name     Block name.
- * @param  {Object}   settings Block settings.
- * @return {?WPBlock}          The block, if it has been successfully
- *                             registered; otherwise `undefined`.
- */
-registerBlockType( 'cgb/block-mim-list-item', {
+registerBlockType('cgb/block-mim-list-item', {
 
-	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'list-item text' ), // Block title. 
-	icon: 'format-aside', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
-	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
+	apiVersion: 3,
+
+	title: __('list-item text'),
+	icon: 'format-aside',
+	category: 'common',
+
 	keywords: [
-		__( 'mim-list-item — CGB Block' ),
-		__( 'list' ),
-		__( 'item' )
+		__('mim-list-item — CGB Block'),
+		__('list'),
+		__('item')
 	],
-	attributes: { 
+
+	attributes: {
+
 		txt: {
 			type: 'string'
-		 }
-	 },
-
-	/**
-	 * The edit function describes the structure of your block in the context of the editor.
-	 * This represents what the editor will render when the block is used.
-	 *
-	 * The "edit" property must be a valid function.
-	 *
-	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
-	 *
-	 * @param {Object} props Props.
-	 * @returns {Mixed} JSX Component.
-	 */
-	edit: ( props ) => {  
-		const {attributes: {txt}, setAttributes} = props;
-
-		function onChangeTxt(newValue) {
-			setAttributes({
-				txt: newValue,
-			})
 		}
 
-        return (
-			<RichText className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} onChange={onChangeTxt} />
-		);
-    },
-    save: ( props ) => {
-		const {
-		   attributes: {
-			  txt,
-		   }
-		} = props;
+	},
+
+	edit: (props) => {
+
+		const { attributes: { txt }, setAttributes } = props;
+
+		const blockProps = useBlockProps({
+			className: 'list__item'
+		});
+
+		function onChangeTxt(newValue) {
+			setAttributes({ txt: newValue });
+		}
+
 		return (
-			<RichText.Content className="list__item" tagName='p' placeholder={__( 'Listitem' )} value={txt} />
+
+			<RichText
+				{...blockProps}
+				tagName="p"
+				placeholder={__('Listitem')}
+				value={txt}
+				onChange={onChangeTxt}
+			/>
+
 		);
-	 },
-} );
+
+	},
+
+	save: (props) => {
+
+		const { attributes: { txt } } = props;
+
+		const blockProps = useBlockProps.save({
+			className: 'list__item'
+		});
+
+		return (
+
+			<RichText.Content
+				{...blockProps}
+				tagName="p"
+				value={txt}
+			/>
+
+		);
+
+	}
+
+});

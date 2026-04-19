@@ -1,160 +1,175 @@
-/**
- * BLOCK: mim-test
- *
- * Registering a basic block with Gutenberg.
- * Simple block, renders and saves the same content without any interactivity.
- */
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, InspectorControls, MediaUpload } = wp.blockEditor;  
-const { TextControl } = wp.components;
+const {
+	RichText,
+	InspectorControls,
+	MediaUpload,
+	useBlockProps
+} = wp.blockEditor;
 
-const { PanelBody, PanelRow, FormToggle } = wp.components;  
+const {
+	TextControl,
+	PanelBody,
+	PanelRow,
+	FormToggle
+} = wp.components;
 
-/**
- * Register: aa Gutenberg Block.
- *
- * Registers a new block provided a unique name and an object defining its
- * behavior. Once registered, the block is made editor as an option to any
- * editor interface where blocks are implemented.
- *
- * @link https://wordpress.org/gutenberg/handbook/block-api/
- * @param  {string}   name     Block name.
- * @param  {Object}   settings Block settings.
- * @return {?WPBlock}          The block, if it has been successfully
- *                             registered; otherwise `undefined`.
- */
-registerBlockType( 'cgb/block-mim-img', {  
-	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'Bild ganze Breite' ), // Block title.
-	icon: 'format-image', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
-	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
-	keywords: [
-		__( 'mim-img — CGB Block' ), 
-		__( 'CGB Example' ), 
-		__( 'create-guten-block' ),
-	], 
+const { Fragment } = wp.element;
+
+registerBlockType('cgb/block-mim-img', {
+
+	apiVersion: 3,
+
+	title: __('Bild ganze Breite'),
+	icon: 'format-image',
+	category: 'common',
+
 	attributes: {
 		imgUrl: {
 			type: 'string',
-			default: 'http://placehold.it/300x200'
+			default: 'https://placecats.com/300/200'
 		},
 		isFullWidth: {
-			type: 'boolean'
-		}, 
+			type: 'boolean',
+			default: false
+		},
 		text: {
-			type: 'string'
+			type: 'string',
+			default: ''
 		},
 		caption: {
-			type: 'string'
+			type: 'string',
+			default: ''
 		}
 	},
 
-	/**
-	 * The edit function describes the structure of your block in the context of the editor.
-	 * This represents what the editor will render when the block is used.
-	 *
-	 * The "edit" property must be a valid function.
-	 *
-	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
-	 *
-	 * @param {Object} props Props.
-	 * @returns {Mixed} JSX Component.
-	 */
-	edit: ( props ) => {
-		const { attributes: { isFullWidth, imgUrl, text, caption }, setAttributes } = props;
-		function selectImage(value){
-			setAttributes({
-				imgUrl: value.sizes.full.url,
-			})
+	edit: (props) => {
+
+		const {
+			attributes: {
+				isFullWidth,
+				imgUrl,
+				text,
+				caption
+			},
+			setAttributes
+		} = props;
+
+		const blockProps = useBlockProps({
+			className: !isFullWidth
+				? 'image image--content-with'
+				: 'image image--full-with'
+		});
+
+		function selectImage(media) {
+
+			const url =
+				(media && media.sizes && media.sizes.full && media.sizes.full.url) ||
+				(media && media.sizes && media.sizes.large && media.sizes.large.url) ||
+				(media && media.url) ||
+				(media && media.source_url);
+
+			if (url) {
+				setAttributes({ imgUrl: url });
+			}
 		}
 
-		function onChangeAltText(newText){
-            setAttributes( { text: newText } );
-        };
+		function onChangeAltText(value) {
+			setAttributes({ text: value });
+		}
 
-		function onChangeCaption(newText){
-            setAttributes( { caption: newText } );
-        };
-	
-		return [
-			<InspectorControls>
-				<PanelBody
-					title={ __( 'Image size', 'jsforwpblocks' ) }
-				>
-					<PanelRow>
-						<label
-							htmlFor="img-size-form-toggle"
-						>
-							{ __( 'Full width', 'jsforwpblocks' ) }
-						</label>
-						<FormToggle
-							id="img-size-form-toggle"
-							label={ __( 'image is full width', 'jsforwpblocks' ) }
-							checked={ isFullWidth }
-							onChange={ () => setAttributes( {isFullWidth: ! isFullWidth } ) }
-						/>
-					</PanelRow>
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Bildlegende und Alt-text', 'alttxt' ) }
-				>
-					<PanelRow>
-						<label
-							htmlFor="high-contrast-form-toggle"
-						>
-						</label>
-						<TextControl
-							id="caption"
-							label={ __( 'Bildlegende', 'caption' ) }
-							value={ caption }
-							help="Bildlegende (optional)"
-							onChange={ onChangeCaption } 
-						/>
-					</PanelRow>
-					<PanelRow>
-						<label
-							htmlFor="high-contrast-form-toggle"
-						>
-						</label>
-						<TextControl
-							id="alt-ext"
-							label={ __( 'alt-text', 'alttext' ) }
-							value={ text }
-							help="Text ist für Screenreader und nicht sichtbar. Leer lassen, wenn das Bild rein dekorativ ist."
-							onChange={ onChangeAltText } 
-						/>
-					</PanelRow>
-				</PanelBody>
-			</InspectorControls>, 
-			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
-				<MediaUpload 
-					onSelect={selectImage}
-					render={ ({open}) => {
-						return <img 
-							src={imgUrl}
-							onClick={open}
-							/>;
-					}} 
+		function onChangeCaption(value) {
+			setAttributes({ caption: value });
+		}
+
+		return (
+			<Fragment>
+
+				<InspectorControls>
+
+					<PanelBody title={__('Image settings')}>
+
+						<PanelRow>
+
+							<label>{__('Full width')}</label>
+
+							<FormToggle
+								checked={isFullWidth}
+								onChange={() =>
+									setAttributes({ isFullWidth: !isFullWidth })
+								}
+							/>
+
+						</PanelRow>
+
+					</PanelBody>
+
+					<PanelBody title={__('Bildtext')}>
+
+						<PanelRow>
+
+							<TextControl
+								label={__('Bildlegende')}
+								value={caption}
+								onChange={onChangeCaption}
+							/>
+
+						</PanelRow>
+
+						<PanelRow>
+
+							<TextControl
+								label={__('Alt-text')}
+								value={text}
+								onChange={onChangeAltText}
+							/>
+
+						</PanelRow>
+
+					</PanelBody>
+
+				</InspectorControls>
+
+				<figure {...blockProps}>
+
+					<MediaUpload
+						onSelect={selectImage}
+						allowedTypes={['image']}
+						value={imgUrl}
+						render={({ open }) => (
+							<button
+								type="button"
+								onClick={open}
+								style={{
+									padding: 0,
+									border: 0,
+									background: 'none',
+									cursor: 'pointer'
+								}}
+							>
+								<img
+									src={imgUrl}
+									alt={text}
+								/>
+							</button>
+						)}
 					/>
-					{caption && <figcaption className="image__caption">{caption}</figcaption>}
-			</figure>,
-		];
+
+					{caption && (
+						<figcaption className="image__caption">
+							{caption}
+						</figcaption>
+					)}
+
+				</figure>
+
+			</Fragment>
+		);
 	},
 
-	/**
-	 * The save function defines the way in which the different attributes should be combined
-	 * into the final markup, which is then serialized by Gutenberg into post_content.
-	 *
-	 * The "save" property must be specified and must be a valid function.
-	 *
-	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
-	 *
-	 * @param {Object} props Props.
-	 * @returns {Mixed} JSX Frontend HTML.
-	 */
-	save: ( props ) => {
+	save: (props) => {
+
 		const {
 			attributes: {
 				isFullWidth,
@@ -162,12 +177,26 @@ registerBlockType( 'cgb/block-mim-img', {
 				text,
 				caption
 			}
-		 } = props;
-	
+		} = props;
+
+		const blockProps = useBlockProps.save({
+			className: !isFullWidth
+				? 'image image--content-with'
+				: 'image image--full-with'
+		});
+
 		return (
-			<figure className={!isFullWidth ? 'image image--content-with' : 'image image--full-with'} >
+			<figure {...blockProps}>
+
 				<img src={imgUrl} alt={text} />
-				{caption && <figcaption className="image__caption">{caption}</figcaption>}
-			</figure> 
-		);}
-} );
+
+				{caption && (
+					<figcaption className="image__caption">
+						{caption}
+					</figcaption>
+				)}
+
+			</figure>
+		);
+	}
+});
